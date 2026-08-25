@@ -1,0 +1,73 @@
+{
+  "meta": {
+    "package_id": "LP-DEMO-001",
+    "title": "用户价值判断入门",
+    "version": "1.0.0",
+    "status": "teacher_review",
+    "language": "zh-CN"
+  },
+  "brief": {
+    "audience": "0-1年产品经理，知道需求和功能的基本概念",
+    "delivery_mode": "live",
+    "total_duration_minutes": 45,
+    "source_policy": "source-grounded",
+    "constraints": ["不使用未经验证的公司案例"]
+  },
+  "sources": [
+    {
+      "id": "S1",
+      "title": "组织内部已审核产品方法手册",
+      "type": "internal-handbook",
+      "version_or_date": "2026-08",
+      "authoritative": true,
+      "usage_scope": "internal"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "O1",
+      "statement": "学员能使用价值公式判断一个需求是否值得进入验证",
+      "bloom_level": "apply",
+      "success_criteria": "能识别新体验、旧体验和替换成本，并给出有依据的结论",
+      "evidence": "完成一个需求案例分析",
+      "source_ids": ["S1"],
+      "prerequisite_ids": []
+    }
+  ],
+  "lessons": [
+    {
+      "id": "L1",
+      "title": "从功能判断转向价值判断",
+      "duration_minutes": 45,
+      "objective_ids": ["O1"],
+      "knowledge_points": ["价值是相对旧方案的增量", "替换成本会抵消体验提升"],
+      "activities": [
+        {"id": "A1", "objective_ids": ["O1"], "type": "case-analysis", "minutes": 15}
+      ],
+      "assessment_ids": ["F1"]
+    }
+  ],
+  "assessments": [
+    {
+      "id": "F1",
+      "type": "short-response",
+      "objective_ids": ["O1"],
+      "prompt": "分析一个用户不愿切换工具的案例。",
+      "answer_or_rubric": "至少识别旧体验、体验增量和一种替换成本。"
+    }
+  ],
+  "quality": {
+    "score": 88,
+    "hard_failures": [],
+    "source_gaps": [],
+    "review_status": "pending-human-review"
+  },
+  "governance": {
+    "generated_by": "ai-lesson-planner v2",
+    "human_owner": "teacher-demo",
+    "reviewers": ["subject-reviewer-demo"],
+    "created_at": "2026-08-26T00:00:00Z",
+    "updated_at": "2026-08-26T00:00:00Z",
+    "change_reason": "initial draft"
+  }
+}
