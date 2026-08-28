@@ -1,0 +1,25 @@
+# veFaaS default ignore patterns
+# Files and directories that will not be packaged and uploaded
+
+# Version control
+.git/
+.svn/
+.hg/
+
+# Python virtual environments and dependencies (installed by function runtime)
+.venv/
+site-packages/
+__pycache__/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# System files
+.DS_Store
+Thumbs.db
+
+# veFaaS CLI config
+.vefaas/

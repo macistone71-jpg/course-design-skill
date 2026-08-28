@@ -38,8 +38,8 @@ GitHub：https://github.com/macistone71-jpg/course-design-skill
 9. 技术文档：完成，见 docs/TECHNICAL.md；
 10. 开发：完成，前端工作台、生成 API、门禁、审核、草稿与导出已实现；
 11. 开发验证：完成，Node 单元测试与 Lesson Package Python 验证器通过；
-12. 灰度测试：待 5–8 名真实教师；
-13. 正式上线：Web MVP 代码完成，云端部署与域名复核待完成；
+12. 灰度测试：技术灰度已完成，待 5–8 名真实教师可用性测试；
+13. 正式上线：已完成 veFaaS + Serverless APIG 技术发布与线上端到端验收；
 14. 上线迭代：待采集真实教师修改率、来源填写率、提交审核率与一次教研通过率。
 
 ## 四、行业与竞品结论
@@ -60,9 +60,13 @@ MagicSchool 的优势是教师场景工具集合，Eduaide 强在引导式生产
 
 当前未虚构教师节省时长、采用率、事实错误率或教学效果。真实备课耗时、教师修改率、一次审核通过率与课程效果必须在灰度后采集；没有数据时标记“待验证”。
 
-## 七、下一步
+## 七、上线结果与下一步
 
-P0：完成云端部署与线上端到端验收；邀请 5–8 名一线教师完成真实 45 分钟教案任务。
+线上地址：https://sppbukp76vna0itdtk0c8.apigateway-cn-beijing.volceapi.com/
+
+云资源：Application `zhibeike-mvp`（`e8fd77a46890`）；Function `x584e3ul`；Serverless APIG `zhibeike-gateway`（`gda8kn5csm537253769l0`）。首页、健康检查和真实生成 API 均返回 HTTP 200；示例课程 7 个活动合计 45 分钟，质量得分 92/100，无硬失败。
+
+P0：邀请 5–8 名一线教师完成真实 45 分钟教案任务。
 
 P1：增加文件解析、逐段编辑、审核退回原因、课程包版本对比和安全的服务端模型路由。
 
@@ -77,4 +81,5 @@ P2：接入授权课程标准库、组织权限、多人协作和真实 LMS 适�
 - references/lesson-package-schema.md：结构化课程包 Schema；
 - references/quality-gates.md：质量评分与硬门禁；
 - examples/lesson-package.example.json：示例课程包；
-- tests/generator.test.js：核心自动化测试。
+- tests/generator.test.js：核心自动化测试；
+- docs/RELEASE-REPORT.md：线上发布与验收报告。
