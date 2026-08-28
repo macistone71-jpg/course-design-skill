@@ -42,7 +42,24 @@ LessonBrief 确认
 - 增加结构化 `lesson-package.json` 和可执行验证器；
 - 增加学科互动插件协议，可选对接立体几何、解析几何和化学反应演示。
 
-## 快速使用
+## Web MVP：智备课
+
+仓库已从方法论 Skill 落地为可上线的响应式 Web 产品，包含课程简报、来源登记、目标—活动—评价映射、8 维质量门禁、人工审核流、本地草稿箱和 Markdown/JSON 导出。
+
+```bash
+npm test
+npm start
+# 打开 http://localhost:3000
+```
+
+产品研究、PRD、技术说明和 14 步上线进度见：
+
+- `docs/RESEARCH.md`
+- `docs/PRD.md`
+- `docs/TECHNICAL.md`
+- `docs/PRODUCT-LAUNCH.md`
+
+## Skill 快速使用
 
 把 `SKILL.md` 安装到支持 Agent Skills 的工具中，或将课程主题、来源材料和以下信息交给 Agent：
 
@@ -71,6 +88,12 @@ python3 scripts/validate_lesson_package.py examples/lesson-package.example.json
 .
 ├── SKILL.md
 ├── README.md
+├── package.json
+├── server.js
+├── src/generator.js
+├── public/                 # 智备课 Web MVP
+├── tests/                  # Node 单元测试
+├── docs/                   # 研究、PRD、技术与上线记录
 ├── examples/
 │   └── lesson-package.example.json
 ├── references/

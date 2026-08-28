@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="智备课：有来源、有目标对齐、有质量门禁的 AI 备课工作台。">
+  <meta name="theme-color" content="#f7f4ed">
+  <title>智备课｜把 AI 草稿变成可审核的教案</title>
+  <link rel="stylesheet" href="/styles.css?v=1.0.0">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">跳到备课工作区</a>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="智备课首页">
+      <span class="brand-mark">备</span>
+      <span><strong>智备课</strong><small>AI LESSON STUDIO</small></span>
+    </a>
+    <nav aria-label="主导航">
+      <a href="#workspace">新建教案</a>
+      <button class="nav-button" id="historyBtn" type="button">草稿箱 <span id="draftCount">0</span></button>
+    </nav>
+    <div class="engine-state"><i></i><span>可审计演示引擎</span></div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="eyebrow"><span>AI 负责初稿</span><span>教师保留决定权</span></div>
+      <h1 id="heroTitle">从一个教学目标，<br><em>生成一份有依据的课。</em></h1>
+      <p>不是“一键写长文”，而是把来源、目标、课堂活动、形成性评价与审核门禁串成一条可追溯的备课链路。</p>
+      <div class="hero-actions">
+        <a class="primary-action" href="#workspace">开始备课 <span>→</span></a>
+        <button class="text-action" id="loadDemo" type="button">载入示例课程</button>
+      </div>
+      <dl class="hero-metrics">
+        <div><dt>3 步</dt><dd>完成结构化初稿</dd></div>
+        <div><dt>8 维</dt><dd>自动质量检查</dd></div>
+        <div><dt>100%</dt><dd>目标—活动—评价映射</dd></div>
+      </dl>
+      <div class="hero-card" aria-label="教案质量预览">
+        <div class="card-top"><span>课程质量体检</span><b>QUALITY GATE</b></div>
+        <div class="score-ring"><strong>92</strong><span>/ 100</span></div>
+        <div class="quality-bars">
+          <div><span>目标对齐</span><i><b style="width:96%"></b></i><em>优秀</em></div>
+          <div><span>来源依据</span><i><b style="width:88%"></b></i><em>通过</em></div>
+          <div><span>教学节奏</span><i><b style="width:91%"></b></i><em>优秀</em></div>
+        </div>
+        <p>✓ 无硬门禁失败，可提交教师审核</p>
+      </div>
+    </section>
+
+    <section class="principles" aria-label="产品原则">
+      <span>来源可追溯</span><span>目标可观察</span><span>评价能证明</span><span>教师可接管</span><span>版本可审计</span>
+    </section>
+
+    <section class="workspace" id="workspace" aria-labelledby="workspaceTitle">
+      <aside class="step-aside">
+        <p class="section-kicker">LESSON WORKFLOW</p>
+        <h2 id="workspaceTitle">新建一节课</h2>
+        <ol class="steps">
+          <li class="active" data-step="1"><b>01</b><span><strong>课程简报</strong><small>对象、目标与约束</small></span></li>
+          <li data-step="2"><b>02</b><span><strong>来源与学情</strong><small>教材、课标与难点</small></span></li>
+          <li data-step="3"><b>03</b><span><strong>生成与审校</strong><small>教案、门禁与审核</small></span></li>
+        </ol>
+        <div class="privacy-note"><strong>隐私提示</strong><p>请勿输入学生姓名、联系方式、成绩明细等个人信息。</p></div>
+      </aside>
+
+      <div class="form-shell" id="formShell">
+        <form id="lessonForm" novalidate>
+          <div class="form-heading">
+            <div><span>STEP 01—02</span><h3>先把“教什么、教给谁”说清楚</h3></div>
+            <button type="button" class="ghost-button" id="fillDemo">填写示例</button>
+          </div>
+
+          <div class="form-grid">
+            <label class="field wide"><span>课程主题 <i>必填</i></span><input name="topic" maxlength="80" required placeholder="例如：光合作用与生态系统能量流动"></label>
+            <label class="field"><span>学科 <i>必填</i></span><select name="subject" required><option value="">请选择</option><option>语文</option><option>数学</option><option>英语</option><option>物理</option><option>化学</option><option>生物</option><option>历史</option><option>地理</option><option>道德与法治</option><option>信息科技</option><option>其他</option></select></label>
+            <label class="field"><span>年级 <i>必填</i></span><select name="grade" required><option value="">请选择</option><option>小学一年级</option><option>小学二年级</option><option>小学三年级</option><option>小学四年级</option><option>小学五年级</option><option>小学六年级</option><option>七年级</option><option>八年级</option><option>九年级</option><option>高中一年级</option><option>高中二年级</option><option>高中三年级</option><option>成人学习者</option></select></label>
+            <label class="field"><span>授课方式</span><select name="deliveryMode"><option>面授</option><option>直播</option><option>录播</option><option>图文</option><option>混合式</option></select></label>
+            <label class="field"><span>课时（分钟）</span><input name="duration" type="number" min="20" max="180" step="1" value="45" required></label>
+            <label class="field wide"><span>学习结果 <i>必填</i></span><textarea name="learningResult" maxlength="240" required placeholder="用“学生能……”描述可观察的课堂结果，避免只写“理解/掌握”"></textarea><small>示例：学生能用食物网解释能量如何流动，并预测一种生物数量变化的影响。</small></label>
+            <label class="field wide"><span>目标学情</span><textarea name="audience" maxlength="120" placeholder="先备知识、班级特点、无障碍或差异化需要"></textarea></label>
+            <label class="field"><span>已知先备知识</span><textarea name="priorKnowledge" maxlength="240" placeholder="例如：已经学习生产者、消费者与分解者"></textarea></label>
+            <label class="field"><span>典型困难</span><textarea name="difficulties" maxlength="240" placeholder="例如：容易把箭头方向理解反"></textarea></label>
+            <label class="field wide source-field"><span>来源材料 <i>强烈建议</i></span><textarea name="sourcesText" maxlength="8000" placeholder="每行一条：课程标准、教材章节、官方资料或教师确认材料"></textarea><small><b>为什么需要：</b>没有来源的草稿会触发硬门禁，不能标记为可发布。</small></label>
+          </div>
+
+          <fieldset class="mode-choice">
+            <legend>产出模式</legend>
+            <label><input type="radio" name="mode" value="quick-draft"><span><b>快速草稿</b><small>结构与课堂流程</small></span></label>
+            <label class="recommended"><input type="radio" name="mode" value="standard" checked><span><b>标准课程包</b><small>来源 + 教案 + 评价 + 门禁</small></span><em>推荐</em></label>
+            <label><input type="radio" name="mode" value="enterprise"><span><b>教研协作</b><small>增加版本与审核字段</small></span></label>
+          </fieldset>
+
+          <div class="validation-box" id="validationBox" role="alert" hidden></div>
+          <div class="submit-row"><p><i></i> 生成内容默认为 <strong>AI 草稿</strong>，不会自动发布。</p><button class="generate-button" type="submit"><span>生成结构化教案</span><b>→</b></button></div>
+        </form>
+      </div>
+
+      <div class="result-shell" id="resultShell" hidden aria-live="polite">
+        <div class="result-loading" id="resultLoading"><span class="loader"></span><h3>正在编排课程结构</h3><p>对齐目标、活动、评价与质量门禁…</p></div>
+        <div id="resultContent" hidden>
+          <header class="result-header"><div><span id="resultStatus" class="status-pill">AI 草稿</span><h2 id="resultTitle"></h2><p id="resultMeta"></p></div><div class="result-actions"><button type="button" id="saveDraft">保存草稿</button><button type="button" id="exportMd">导出 Markdown</button><button type="button" id="exportJson">导出 JSON</button></div></header>
+          <div class="result-layout">
+            <nav class="result-tabs" aria-label="教案结果"><button class="active" data-tab="flow">课堂流程</button><button data-tab="alignment">目标与评价</button><button data-tab="quality">质量门禁</button><button data-tab="json">结构化包</button></nav>
+            <div class="tab-panel" id="tabPanel"></div>
+            <aside class="review-panel"><span>HUMAN IN THE LOOP</span><h3>人工审核</h3><div class="review-line done"><i>✓</i><p><b>AI 初稿</b><small>结构生成完成</small></p></div><div class="review-line"><i>1</i><p><b>教师审核</b><small>学情、节奏与可教性</small></p></div><div class="review-line"><i>2</i><p><b>教研审核</b><small>学科准确性与课标</small></p></div><button type="button" id="teacherReview">提交教师审核</button><small class="review-help">只有通过硬门禁的草稿才能提交。</small></aside>
+          </div>
+          <button class="new-lesson" id="newLesson" type="button">← 返回修改课程简报</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-section">
+      <div><span class="section-kicker">WHY ZHIBEIKE</span><h2>优秀教案，不止是<br>一段流畅的文字。</h2></div>
+      <div class="why-grid"><article><b>01</b><h3>先有证据，再有内容</h3><p>课程标准、教材和教师材料进入 Source Pack；缺少依据就明确拦截。</p></article><article><b>02</b><h3>目标必须可被证明</h3><p>每个目标都绑定课堂活动与形成性评价，避免“目标很美、课堂无关”。</p></article><article><b>03</b><h3>AI 草稿不越权发布</h3><p>教师看学情与可教性，教研看学科准确性；AI 只负责可回溯的初稿。</p></article></div>
+    </section>
+  </main>
+
+  <dialog id="historyDialog"><div class="dialog-head"><div><span>DRAFT LIBRARY</span><h2>本地草稿箱</h2></div><button id="closeHistory" aria-label="关闭">×</button></div><div id="historyList"></div><p class="dialog-note">草稿仅保存在当前浏览器，不会自动上传。</p></dialog>
+
+  <footer><div class="brand"><span class="brand-mark">备</span><span><strong>智备课</strong><small>AI LESSON STUDIO</small></span></div><p>让每一份 AI 教案都有依据、有检查、有人负责。</p><span>© 2026 智备课 MVP · 何庆丰</span></footer>
+  <script src="/app.js?v=1.0.0" defer></script>
+</body>
+</html>
