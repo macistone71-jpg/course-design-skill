@@ -19,9 +19,18 @@
 | 9. 技术选型与技术文档 | 完成 | 见 `docs/TECHNICAL.md` |
 | 10. 开发 | 完成 | 首页、备课表单、教案生成、质量门禁、审核流、草稿箱、Markdown/JSON 导出 |
 | 11. 开发验证与测试 | 完成 | Node 单元测试、API 与端到端浏览器验收 |
-| 12. 灰度测试 | 待真实用户 | 线上 Staging 可作为 5–8 人教师灰度入口 |
-| 13. 正式上线 | 进行中 | 完成部署与域名验证后更新 |
+| 12. 灰度测试 | 技术灰度完成 | 线上首页、健康检查、真实生成 API 与移动端布局已验收；5–8 名教师可用性测试待组织 |
+| 13. 正式上线 | 完成 | veFaaS Application 已发布，线上地址见“部署结果” |
 | 14. 上线后迭代 | 待采集 | 指标与访谈计划见下文 |
+
+## 部署结果
+
+- 线上地址：https://sppbukp76vna0itdtk0c8.apigateway-cn-beijing.volceapi.com/
+- veFaaS Application：`zhibeike-mvp`（`e8fd77a46890`）
+- 底层 Function：`x584e3ul`
+- Serverless APIG：`zhibeike-gateway`（`gda8kn5csm537253769l0`）
+- Runtime：Node.js 20；启动命令：`npm start`；端口：`3000`
+- 技术验收：首页 HTTP 200、`/api/health` HTTP 200、`/api/generate` HTTP 200、45 分钟课程分钟总和为 45、质量门禁通过。
 
 ## MVP 成功标准
 

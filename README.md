@@ -46,6 +46,8 @@ LessonBrief 确认
 
 仓库已从方法论 Skill 落地为可上线的响应式 Web 产品，包含课程简报、来源登记、目标—活动—评价映射、8 维质量门禁、人工审核流、本地草稿箱和 Markdown/JSON 导出。
 
+**线上体验：** https://sppbukp76vna0itdtk0c8.apigateway-cn-beijing.volceapi.com/
+
 ```bash
 npm test
 npm start
