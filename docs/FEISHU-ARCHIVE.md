@@ -72,14 +72,14 @@ P1：增加文件解析、逐段编辑、审核退回原因、课程包版本对
 
 P2：接入授权课程标准库、组织权限、多人协作和真实 LMS 适配器。
 
-## 八、必要文件与报告
+## 八、必要文件与报告（可点击）
 
-- docs/RESEARCH.md：行业与竞品分析；
-- docs/PRD.md：产品需求文档；
-- docs/TECHNICAL.md：技术选型与架构；
-- docs/PRODUCT-LAUNCH.md：14 步上线进度、灰度与指标；
-- references/lesson-package-schema.md：结构化课程包 Schema；
-- references/quality-gates.md：质量评分与硬门禁；
-- examples/lesson-package.example.json：示例课程包；
-- tests/generator.test.js：核心自动化测试；
-- docs/RELEASE-REPORT.md：线上发布与验收报告。
+- [行业与竞品分析](https://github.com/macistone71-jpg/course-design-skill/blob/main/docs/RESEARCH.md)
+- [产品需求文档 PRD](https://github.com/macistone71-jpg/course-design-skill/blob/main/docs/PRD.md)
+- [技术选型与架构](https://github.com/macistone71-jpg/course-design-skill/blob/main/docs/TECHNICAL.md)
+- [14 步上线进度、灰度与指标](https://github.com/macistone71-jpg/course-design-skill/blob/main/docs/PRODUCT-LAUNCH.md)
+- [线上发布与验收报告](https://github.com/macistone71-jpg/course-design-skill/blob/main/docs/RELEASE-REPORT.md)
+- [结构化课程包 Schema](https://github.com/macistone71-jpg/course-design-skill/blob/main/references/lesson-package-schema.md)
+- [质量评分与硬门禁](https://github.com/macistone71-jpg/course-design-skill/blob/main/references/quality-gates.md)
+- [示例课程包](https://github.com/macistone71-jpg/course-design-skill/blob/main/examples/lesson-package.example.json)
+- [核心自动化测试](https://github.com/macistone71-jpg/course-design-skill/blob/main/tests/generator.test.js)
