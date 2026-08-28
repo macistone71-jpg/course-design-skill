@@ -58,6 +58,7 @@ npm start
 - `docs/PRD.md`
 - `docs/TECHNICAL.md`
 - `docs/PRODUCT-LAUNCH.md`
+- `docs/FEISHU-ARCHIVE.md`（AI 备课独立归档，不与知识检测项目混写）
 
 ## Skill 快速使用
 
