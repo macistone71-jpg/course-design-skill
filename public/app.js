@@ -2,6 +2,7 @@
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
+const R = window.ReviewState;
 const form = $('#lessonForm');
 const formShell = $('#formShell');
 const resultShell = $('#resultShell');
@@ -103,18 +104,34 @@ function renderResult() {
   $('#resultTitle').textContent = pkg.meta.title;
   $('#resultMeta').textContent = `${pkg.meta.package_id} · ${pkg.brief.total_duration_minutes} 分钟 · ${pkg.brief.delivery_mode}`;
   updateStatus();
+  const finalTab = $('#finalLessonTab');
+  finalTab.hidden = !R.isApproved(pkg.meta.status);
+  if (activeTab === 'final' && finalTab.hidden) activeTab = 'flow';
   $$('.result-tabs button').forEach(button => button.classList.toggle('active', button.dataset.tab === activeTab));
   renderTab();
 }
 
 function updateStatus() {
-  const labels = { draft_ai: 'AI 草稿', teacher_review: '教师审核中', subject_review: '教研审核中', approved: '已批准' };
-  $('#resultStatus').textContent = labels[currentPackage.meta.status] || currentPackage.meta.status;
+  const status = currentPackage.meta.status;
+  const progress = R.progress(status);
+  $('#resultStatus').textContent = R.label(status);
   const button = $('#teacherReview');
-  if (currentPackage.meta.status === 'draft_ai') button.textContent = '提交教师审核';
-  else if (currentPackage.meta.status === 'teacher_review') button.textContent = '教师确认，提交教研';
-  else if (currentPackage.meta.status === 'subject_review') button.textContent = '教研批准';
-  else { button.textContent = '审核已完成'; button.disabled = true; }
+  const teacherLine = $('#reviewTeacher');
+  const subjectLine = $('#reviewSubject');
+  teacherLine.classList.toggle('active', progress === 1);
+  teacherLine.classList.toggle('done', progress >= 2);
+  subjectLine.classList.toggle('active', progress === 2);
+  subjectLine.classList.toggle('done', progress >= 3);
+  teacherLine.querySelector('i').textContent = progress >= 2 ? '✓' : '1';
+  subjectLine.querySelector('i').textContent = progress >= 3 ? '✓' : '2';
+  if (status === 'draft_ai') button.textContent = '提交教师审核';
+  else if (status === 'teacher_review') button.textContent = '教师确认，提交教研';
+  else if (status === 'subject_review') button.textContent = '教研批准并生成最终教案';
+  else button.textContent = '查看最终教案';
+  button.disabled = status === 'draft_ai' && !currentPackage.quality.passed;
+  $('#reviewHelp').textContent = R.isApproved(status)
+    ? '教师与教研审核已完成，最终教案已生成并自动保存。'
+    : '每次审核操作都会自动保存到当前浏览器。';
 }
 
 function renderTab() {
@@ -122,6 +139,7 @@ function renderTab() {
   if (activeTab === 'flow') panel.innerHTML = renderFlow();
   if (activeTab === 'alignment') panel.innerHTML = renderAlignment();
   if (activeTab === 'quality') panel.innerHTML = renderQuality();
+  if (activeTab === 'final') panel.innerHTML = renderFinalLesson();
   if (activeTab === 'json') panel.innerHTML = `<pre class="json-view">${esc(JSON.stringify(currentPackage, null, 2))}</pre>`;
 }
 
@@ -143,33 +161,60 @@ function renderQuality() {
   return `<div class="quality-hero"><strong>${q.score}</strong><div><h3>${q.passed ? '自动门禁已通过' : '暂不可提交正式发布'}</h3><p>建议阈值 ${q.threshold} 分，且无硬失败</p></div></div><section class="section-block"><h3>八维质量评分</h3><div class="gate-list">${Object.entries(q.score_breakdown).map(([key, value]) => `<div><span>${labels[key]}</span><i><b style="width:${Math.round(value / maxima[key] * 100)}%"></b></i><strong>${value}</strong></div>`).join('')}</div>${q.hard_failures.length ? `<div class="hard-failure"><b>硬门禁失败</b><br>${q.hard_failures.map(esc).join('<br>')}</div>` : '<div class="pass-message"><b>✓ 无硬门禁失败</b>，可以进入教师人工审核。</div>'}</section><section class="section-block"><h3>来源清单</h3>${currentPackage.sources.length ? currentPackage.sources.map(source => `<article class="objective-card"><span>${esc(source.id)} · ${esc(source.type)}</span><h4>${esc(source.title)}</h4><p>版本/日期：${esc(source.version_or_date)} · 适用：${esc(source.usage_scope)}</p></article>`).join('') : '<p>尚未提供来源。</p>'}</section>`;
 }
 
+function renderFinalLesson() {
+  if (!R.isApproved(currentPackage.meta.status)) return '<div class="hard-failure">最终教案需完成教师与教研审核后生成。</div>';
+  const pkg = currentPackage;
+  const lesson = pkg.lessons[0];
+  const reviewLog = pkg.governance.review_log || [];
+  return `<article class="final-lesson"><header class="final-doc-head"><div><span>FINAL LESSON PACKAGE</span><h2>${esc(pkg.meta.title)}</h2><p>${esc(pkg.meta.package_id)} · 版本 ${esc(pkg.meta.version)} · ${pkg.brief.total_duration_minutes} 分钟</p></div><b>双审通过</b></header>
+  <section class="final-section"><h3>一、课程简报</h3><dl class="final-brief"><div><dt>教学对象</dt><dd>${esc(pkg.brief.audience)}</dd></div><div><dt>学习结果</dt><dd>${esc(pkg.brief.learning_result)}</dd></div><div><dt>先备知识</dt><dd>${esc(pkg.brief.prior_knowledge)}</dd></div><div><dt>典型困难</dt><dd>${esc(pkg.brief.typical_difficulty)}</dd></div></dl></section>
+  <section class="final-section"><h3>二、来源依据</h3><ol class="final-sources">${pkg.sources.map(source => `<li><b>${esc(source.title)}</b><span>${esc(source.type)} · ${esc(source.version_or_date)}</span></li>`).join('')}</ol></section>
+  <section class="final-section"><h3>三、可观察学习目标</h3>${pkg.objectives.map(objective => `<article class="final-objective"><b>${esc(objective.id)}｜${esc(objective.statement)}</b><p>成功标准：${esc(objective.success_criteria)}</p><p>达成证据：${esc(objective.evidence)}</p></article>`).join('')}</section>
+  <section class="final-section"><h3>四、课堂实施流程</h3><div class="final-flow">${lesson.activities.map((item, index) => `<article><i>${String(index + 1).padStart(2, '0')}</i><div><h4>${esc(item.phase)} <small>${item.minutes} 分钟</small></h4><p><b>教师：</b>${esc(item.teacher)}</p><p><b>学生：</b>${esc(item.student)}</p><p><b>证据：</b>${esc(item.evidence)}</p></div></article>`).join('')}</div></section>
+  <section class="final-section"><h3>五、形成性评价</h3>${pkg.assessments.map(item => `<article class="final-assessment"><b>${esc(item.id)}｜${esc(item.prompt)}</b><p>评分依据：${esc(item.answer_or_rubric)}</p></article>`).join('')}</section>
+  <section class="final-section"><h3>六、差异化支持</h3><div class="final-support"><p><b>支架：</b>${esc(pkg.teacher_guide.differentiation.support)}</p><p><b>核心：</b>${esc(pkg.teacher_guide.differentiation.core)}</p><p><b>挑战：</b>${esc(pkg.teacher_guide.differentiation.challenge)}</p></div></section>
+  <section class="final-approval"><strong>质量 ${pkg.quality.score}/100 · 无硬失败 · 教师与教研审核完成</strong><p>审批记录：${reviewLog.length ? reviewLog.map(item => `${R.label(item.to)} ${new Date(item.at).toLocaleString('zh-CN')}`).join('；') : '已完成双审'}</p><small>最终教案仍由授课教师对学科事实、班级适配与实际使用负责。</small></section></article>`;
+}
+
 $$('.result-tabs button').forEach(button => button.addEventListener('click', () => { activeTab = button.dataset.tab; renderResult(); }));
 
 $('#teacherReview').addEventListener('click', () => {
-  if (!currentPackage.quality.passed) return alert('当前草稿存在硬门禁失败。请返回补充来源材料后重新生成。');
-  const transitions = { draft_ai: 'teacher_review', teacher_review: 'subject_review', subject_review: 'approved' };
-  if (transitions[currentPackage.meta.status]) {
-    currentPackage.meta.status = transitions[currentPackage.meta.status];
-    currentPackage.governance.updated_at = new Date().toISOString();
-    updateStatus();
+  if (R.isApproved(currentPackage.meta.status)) {
+    activeTab = 'final';
+    renderResult();
+    $('#tabPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
   }
+  if (!currentPackage.quality.passed) return alert('当前草稿存在硬门禁失败。请返回补充来源材料后重新生成。');
+  const from = currentPackage.meta.status;
+  const to = R.next(from);
+  currentPackage.meta.status = to;
+  currentPackage.governance.updated_at = new Date().toISOString();
+  currentPackage.governance.review_log = currentPackage.governance.review_log || [];
+  currentPackage.governance.review_log.push({ from, to, at: currentPackage.governance.updated_at });
+  if (R.isApproved(to)) activeTab = 'final';
+  saveDraft(true);
+  renderResult();
+  if (R.isApproved(to)) $('#tabPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
 $('#newLesson').addEventListener('click', () => { resultShell.hidden = true; formShell.hidden = false; setStep(1); formShell.scrollIntoView({ behavior: 'smooth' }); });
 $('#fillDemo').addEventListener('click', fillDemo);
 $('#loadDemo').addEventListener('click', () => { fillDemo(); $('#workspace').scrollIntoView({ behavior: 'smooth' }); });
 
-function saveDraft() {
+function saveDraft(silent = false) {
   const drafts = loadDrafts();
   const next = [currentPackage, ...drafts.filter(item => item.meta.package_id !== currentPackage.meta.package_id)].slice(0, 10);
   localStorage.setItem('zhibeike-drafts', JSON.stringify(next));
   updateDraftCount();
-  $('#saveDraft').textContent = '已保存 ✓';
-  setTimeout(() => { $('#saveDraft').textContent = '保存草稿'; }, 1500);
+  if (!silent) {
+    $('#saveDraft').textContent = '已保存 ✓';
+    setTimeout(() => { $('#saveDraft').textContent = '保存草稿'; }, 1500);
+  }
 }
 function loadDrafts() { try { return JSON.parse(localStorage.getItem('zhibeike-drafts') || '[]'); } catch { return []; } }
 function updateDraftCount() { $('#draftCount').textContent = loadDrafts().length; }
-$('#saveDraft').addEventListener('click', saveDraft);
+$('#saveDraft').addEventListener('click', () => saveDraft(false));
 
 function download(name, content, type) {
   const link = document.createElement('a');
@@ -181,7 +226,7 @@ function download(name, content, type) {
 
 function toMarkdown(pkg) {
   const lesson = pkg.lessons[0];
-  return `# ${pkg.meta.title}\n\n> 状态：${pkg.meta.status}｜版本：${pkg.meta.version}｜课程包：${pkg.meta.package_id}\n\n## Lesson Brief\n\n- 对象：${pkg.brief.audience}\n- 时长：${pkg.brief.total_duration_minutes} 分钟\n- 学习结果：${pkg.brief.learning_result}\n- 典型困难：${pkg.brief.typical_difficulty}\n\n## 来源包\n\n${pkg.sources.length ? pkg.sources.map(s => `- [${s.id}] ${s.title}`).join('\n') : '- SOURCE_GAP：未提供来源'}\n\n## 学习目标\n\n${pkg.objectives.map(o => `### ${o.id}\n${o.statement}\n\n**成功标准：** ${o.success_criteria}\n`).join('\n')}\n## 课堂流程\n\n${lesson.activities.map((a, i) => `### ${i + 1}. ${a.phase}（${a.minutes} 分钟）\n- 教师：${a.teacher}\n- 学生：${a.student}\n- 证据：${a.evidence}\n`).join('\n')}\n## 形成性评价\n\n${pkg.assessments.map(a => `- **${a.id}** ${a.prompt}\n  - 评分：${a.answer_or_rubric}`).join('\n')}\n\n## 质量门禁\n\n- 得分：${pkg.quality.score}/100\n- 结论：${pkg.quality.passed ? '自动门禁通过，待人工审核' : '未通过'}\n- 硬失败：${pkg.quality.hard_failures.join('；') || '无'}\n`;
+  return `# ${pkg.meta.title}\n\n> 状态：${pkg.meta.status}｜版本：${pkg.meta.version}｜课程包：${pkg.meta.package_id}\n\n## Lesson Brief\n\n- 对象：${pkg.brief.audience}\n- 时长：${pkg.brief.total_duration_minutes} 分钟\n- 学习结果：${pkg.brief.learning_result}\n- 典型困难：${pkg.brief.typical_difficulty}\n\n## 来源包\n\n${pkg.sources.length ? pkg.sources.map(s => `- [${s.id}] ${s.title}`).join('\n') : '- SOURCE_GAP：未提供来源'}\n\n## 学习目标\n\n${pkg.objectives.map(o => `### ${o.id}\n${o.statement}\n\n**成功标准：** ${o.success_criteria}\n`).join('\n')}\n## 课堂流程\n\n${lesson.activities.map((a, i) => `### ${i + 1}. ${a.phase}（${a.minutes} 分钟）\n- 教师：${a.teacher}\n- 学生：${a.student}\n- 证据：${a.evidence}\n`).join('\n')}\n## 形成性评价\n\n${pkg.assessments.map(a => `- **${a.id}** ${a.prompt}\n  - 评分：${a.answer_or_rubric}`).join('\n')}\n\n## 质量门禁\n\n- 得分：${pkg.quality.score}/100\n- 结论：${R.conclusion(pkg)}\n- 硬失败：${pkg.quality.hard_failures.join('；') || '无'}\n`;
 }
 
 $('#exportJson').addEventListener('click', () => download(`${currentPackage.meta.package_id}.json`, JSON.stringify(currentPackage, null, 2), 'application/json'));

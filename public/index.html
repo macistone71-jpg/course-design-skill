@@ -6,7 +6,7 @@
   <meta name="description" content="智备课：有来源、有目标对齐、有质量门禁的 AI 备课工作台。">
   <meta name="theme-color" content="#f7f4ed">
   <title>智备课｜把 AI 草稿变成可审核的教案</title>
-  <link rel="stylesheet" href="/styles.css?v=1.0.0">
+  <link rel="stylesheet" href="/styles.css?v=1.1.0">
 </head>
 <body>
   <a class="skip-link" href="#workspace">跳到备课工作区</a>
@@ -101,9 +101,9 @@
         <div id="resultContent" hidden>
           <header class="result-header"><div><span id="resultStatus" class="status-pill">AI 草稿</span><h2 id="resultTitle"></h2><p id="resultMeta"></p></div><div class="result-actions"><button type="button" id="saveDraft">保存草稿</button><button type="button" id="exportMd">导出 Markdown</button><button type="button" id="exportJson">导出 JSON</button></div></header>
           <div class="result-layout">
-            <nav class="result-tabs" aria-label="教案结果"><button class="active" data-tab="flow">课堂流程</button><button data-tab="alignment">目标与评价</button><button data-tab="quality">质量门禁</button><button data-tab="json">结构化包</button></nav>
+            <nav class="result-tabs" aria-label="教案结果"><button class="active" data-tab="flow">课堂流程</button><button data-tab="alignment">目标与评价</button><button data-tab="quality">质量门禁</button><button id="finalLessonTab" data-tab="final" hidden>最终教案</button><button data-tab="json">结构化包</button></nav>
             <div class="tab-panel" id="tabPanel"></div>
-            <aside class="review-panel"><span>HUMAN IN THE LOOP</span><h3>人工审核</h3><div class="review-line done"><i>✓</i><p><b>AI 初稿</b><small>结构生成完成</small></p></div><div class="review-line"><i>1</i><p><b>教师审核</b><small>学情、节奏与可教性</small></p></div><div class="review-line"><i>2</i><p><b>教研审核</b><small>学科准确性与课标</small></p></div><button type="button" id="teacherReview">提交教师审核</button><small class="review-help">只有通过硬门禁的草稿才能提交。</small></aside>
+            <aside class="review-panel"><span>HUMAN IN THE LOOP</span><h3>人工审核</h3><div class="review-line done" id="reviewAi"><i>✓</i><p><b>AI 初稿</b><small>结构生成完成</small></p></div><div class="review-line" id="reviewTeacher"><i>1</i><p><b>教师审核</b><small>学情、节奏与可教性</small></p></div><div class="review-line" id="reviewSubject"><i>2</i><p><b>教研审核</b><small>学科准确性与课标</small></p></div><button type="button" id="teacherReview">提交教师审核</button><small class="review-help" id="reviewHelp">只有通过硬门禁的草稿才能提交。</small></aside>
           </div>
           <button class="new-lesson" id="newLesson" type="button">← 返回修改课程简报</button>
         </div>
@@ -119,6 +119,7 @@
   <dialog id="historyDialog"><div class="dialog-head"><div><span>DRAFT LIBRARY</span><h2>本地草稿箱</h2></div><button id="closeHistory" aria-label="关闭">×</button></div><div id="historyList"></div><p class="dialog-note">草稿仅保存在当前浏览器，不会自动上传。</p></dialog>
 
   <footer><div class="brand"><span class="brand-mark">备</span><span><strong>智备课</strong><small>AI LESSON STUDIO</small></span></div><p>让每一份 AI 教案都有依据、有检查、有人负责。</p><span>© 2026 智备课 MVP · 何庆丰</span></footer>
-  <script src="/app.js?v=1.0.0" defer></script>
+  <script src="/review-state.js?v=1.1.0"></script>
+  <script src="/app.js?v=1.1.0" defer></script>
 </body>
 </html>
